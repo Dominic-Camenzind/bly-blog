@@ -20,5 +20,29 @@
     <input class="post" type="submit" value="Posten">
 </div>
 
+<?php 
+    $user = 'root';
+    $password = '';
+    
+    $pdo = new PDO('mysql:host=localhost;dbname=blog', $user, $password, [
+        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+        PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
+    ]);
+
+    $count = $pdo->exec("INSERT INTO `posts` (content) VALUES ('Geschirr abwaschen')");
+    
+    $stmt = $pdo->query('SELECT * FROM `posts`');
+    foreach($stmt->fetchAll() as $x) {
+    }
+
+    echo '<ul>';
+    foreach ($x as $y)
+    {
+        echo '<li>' . $y . '</li>';
+    }
+
+
+?>
+
 </body>
 </html>
