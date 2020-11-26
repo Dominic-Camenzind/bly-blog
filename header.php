@@ -14,7 +14,7 @@
     <ul class="flex-item2">
         <li><a href="home.php">Home</a></li>
         <li><a href="otherblogs.php">BLJ Blogseiten</a></li>
-        <li><a href="login.php">Anmelden</a></li>
+        <li><a href="login.php">Registrieren</a></li>
     </ul>
 </nav>
 

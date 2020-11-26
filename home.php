@@ -9,7 +9,7 @@
 <?php 
     include "header.php";
 ?>
-    <img src="https://en.wikipedia.org/wiki/Photographic_mosaic#/media/File:Mosaicr_seagull.jpg" alt="test">
+    
 <?php 
     $user = 'root';
     $password = '';
@@ -28,14 +28,14 @@
 		<div class="name">
 			<label for="name">Name</label>
 			<input class="name1" type="text" id="name" name="name">
-		</div>
+        </div>
 		<div class="content">
 			<label for="message">Nachricht</label>
 			<textarea class="content1" type="text" id="message" name="message"></textarea>
         </div>
-        <div class="c">
-			<label for="message">Nachricht</label>
-			<textarea class="content1" type="text" id="message" name="message"></textarea>
+        <div class="picture">
+			<label for="message">Bild URL</label>
+			<textarea class="picture1" type="text" id="picture" name="picture"></textarea>
 		</div>
 
 		<input class="button" type="submit" value="Speichern">
@@ -43,32 +43,29 @@
 	</form>
 
 <?php
-    if($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-        $message = '';
-        $name = '';
+$message = trim($_POST['message'] ?? '');
+$name = trim($_POST['name'] ?? '');
+$link = trim($_POST['picture'] ?? '');
 
-        if(isset($_POST['name'])) {
-            $name =$_POST['name'];
-        }
-        if(isset($_POST['message'])) {
-            $message = $_POST['message'];
-        }
-    $count = $pdo->exec("INSERT INTO `posts` (content) VALUES ('$name')");
-    $count = $pdo->exec("INSERT INTO `posts` (content) VALUES ('$message')");
- 
-    $stmt = $pdo->query('SELECT * FROM `posts`'); ?>
-    
-    <?php
-    foreach($stmt->fetchAll() as $x) { ?>
+    //insert into database
+    $stmt = $pdo->prepare('INSERT INTO posts (name, content, picture, creation_date) 
+        VALUES (:name, :message, :picture,  now())');
 
-        <div class="container2">
-            <h1 class="title"><?= $x['name'] ?></h1>
-		    <div class="post"><?= $x['content'] ?></div>
-        </div>
-
-    <?php }
-    }?>
+    $stmt->execute([':name' => $name, ':message' => $message, ':picture' => $link]);
+    $stmt = $pdo->query("SELECT * FROM posts");
+    foreach($stmt->fetchAll() as $x)
+    {
+        echo"<ul class='post'>";
+        echo"<div>$x[1]</div>";
+        echo"<div>$x[2]</div>";
+        echo"<img src=$x[3]>";
+        echo"<div>$x[4]</div>";
+        echo"</ul><hr>";
+    }
+}
+?>
 
 
 </body>
